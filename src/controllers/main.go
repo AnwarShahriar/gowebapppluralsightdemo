@@ -6,11 +6,10 @@ import (
 	"os"
 	"strings"
 	"text/template"
-	"viewmodels"
 )
 
 func Register(templates *template.Template) {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	/*http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		requestedFile := req.URL.Path[1:]
 		template := templates.Lookup(requestedFile + ".html")
 
@@ -27,7 +26,15 @@ func Register(templates *template.Template) {
 		} else {
 			w.WriteHeader(404)
 		}
-	})
+	})*/
+
+	hc := new(homeController)
+	hc.template = templates.Lookup("home.html")
+	http.HandleFunc("/home", hc.get)
+
+	cc := new(categoriesController)
+	cc.template = templates.Lookup("categories.html")
+	http.HandleFunc("/categories", cc.get)
 
 	http.HandleFunc("/img/", serveResources)
 	http.HandleFunc("/css/", serveResources)
